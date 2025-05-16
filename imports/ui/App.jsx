@@ -9,7 +9,7 @@ const { Title } = Typography;
 export const App = () => (
   <Layout>
     <Header style={{ background: '#fff', padding: '0 20px' }}>
-      <Title level={2} style={{ margin: '16px 0' }}>Welcome to Meteor!</Title>
+      <Title level={2} style={{ margin: '16px 0' }}>Welcome to FileNest!</Title>
     </Header>
     <Content style={{ padding: '20px' }}>
       <Users />
