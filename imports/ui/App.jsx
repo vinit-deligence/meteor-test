@@ -1,6 +1,7 @@
 import React from 'react';
 import { Layout, Typography } from 'antd';
 import { Users } from './Users.jsx';
+import { Files } from './Files.jsx';
 
 const { Header, Content } = Layout;
 const { Title } = Typography;
@@ -12,6 +13,7 @@ export const App = () => (
     </Header>
     <Content style={{ padding: '20px' }}>
       <Users />
+      <Files />
     </Content>
   </Layout>
 );
