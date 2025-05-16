@@ -2,6 +2,10 @@
 
 A Meteor-based file management application that demonstrates handling different types of files (Images, PDFs, and URLs) along with user management capabilities. This project was created as a test project for zipBoard.
 
+## Important Note
+
+This repository is for testing purposes only. Please fork this repository to your own account and do not modify this original repository. All your work should be done in your forked version.
+
 ## 🚀 Features
 
 - User management with profile information
