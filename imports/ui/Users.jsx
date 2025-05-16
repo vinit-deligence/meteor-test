@@ -16,7 +16,7 @@ export const Users = () => {
 
   return (
     <Card style={{ marginBottom: '20px' }}>
-      <Title level={3}>Current Users</Title>
+      <Title level={3}>Users</Title>
       <Collapse>
         {users.map(user => (
           <Panel 

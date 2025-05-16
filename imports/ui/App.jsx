@@ -1,7 +1,5 @@
 import React from 'react';
 import { Layout, Typography } from 'antd';
-import { Hello } from './Hello.jsx';
-import { Info } from './Info.jsx';
 import { Users } from './Users.jsx';
 
 const { Header, Content } = Layout;
@@ -14,8 +12,6 @@ export const App = () => (
     </Header>
     <Content style={{ padding: '20px' }}>
       <Users />
-      <Hello/>
-      <Info/>
     </Content>
   </Layout>
 );
