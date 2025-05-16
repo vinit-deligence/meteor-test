@@ -1,11 +1,19 @@
 import React from 'react';
+import { Layout, Typography } from 'antd';
 import { Hello } from './Hello.jsx';
 import { Info } from './Info.jsx';
 
+const { Header, Content } = Layout;
+const { Title } = Typography;
+
 export const App = () => (
-  <div>
-    <h1>Welcome to Meteor!</h1>
-    <Hello/>
-    <Info/>
-  </div>
+  <Layout>
+    <Header style={{ background: '#fff', padding: '0 20px' }}>
+      <Title level={2} style={{ margin: '16px 0' }}>Welcome to Meteor!</Title>
+    </Header>
+    <Content style={{ padding: '20px' }}>
+      <Hello/>
+      <Info/>
+    </Content>
+  </Layout>
 );
