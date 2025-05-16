@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { UsersCollection, createUser } from '/imports/api/users';
+import { FilesCollection, seedFiles } from '/imports/api/files';
 
 async function seedUsers() {
   const dummyUsers = [
@@ -19,8 +20,18 @@ Meteor.startup(async () => {
     await seedUsers();
   }
 
+  // Seed files if the collection is empty
+  if (await FilesCollection.find().countAsync() === 0) {
+    await seedFiles();
+  }
+
   // Publish the Users collection to all clients
   Meteor.publish("users", function () {
     return UsersCollection.find();
+  });
+
+  // Publish the Files collection to all clients
+  Meteor.publish("files", function () {
+    return FilesCollection.find();
   });
 });
