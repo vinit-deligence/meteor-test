@@ -1,14 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useFind, useSubscribe } from 'meteor/react-meteor-data';
 import { FilesCollection, FileTypes } from '../api/files';
 import { Tabs, Card, Typography, Image, Button, Spin, Tag } from 'antd';
 import { FileImageOutlined, FilePdfOutlined, LinkOutlined } from '@ant-design/icons';
+import { Meteor } from 'meteor/meteor';
+import { isAdmin, isViewer } from '../api/rolesDefinations';
 
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
 
-const FileCard = ({ file }) => {
+const FileCard = ({ file, canAccess }) => {
   const renderFileContent = () => {
+    if (!canAccess) {
+      return (
+        <div>
+          <Text type="secondary">Preview not available for your role</Text>
+        </div>
+      );
+    }
+
     switch (file.type) {
       case FileTypes.IMAGE:
         return (
@@ -53,9 +63,11 @@ const FileCard = ({ file }) => {
       title={file.name}
       style={{ marginBottom: '16px' }}
       extra={
-        <Button type="link" href={file.url} target="_blank">
-          Open
-        </Button>
+        canAccess && (
+          <Button type="link" href={file.url} target="_blank">
+            Open
+          </Button>
+        )
       }
     >
       {renderFileContent()}
@@ -71,10 +83,31 @@ const FileCard = ({ file }) => {
 };
 
 export const Files = () => {
-  const isLoading = useSubscribe('files');
+  const [canAccess, setCanAccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const isLoadingFiles = useSubscribe('files');
   const files = useFind(() => FilesCollection.find());
 
-  if (isLoading()) {
+  useEffect(() => {
+    const checkAccess = async () => {
+      try {
+        const userId = Meteor.userId();
+        const [adminStatus, viewerStatus] = await Promise.all([
+          isAdmin(userId),
+          isViewer(userId)
+        ]);
+        setCanAccess(adminStatus || viewerStatus);
+      } catch (error) {
+        console.error('Error checking access:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAccess();
+  }, []);
+
+  if (isLoading) {
     return <Spin size="large" />;
   }
 
@@ -98,7 +131,7 @@ export const Files = () => {
           key={FileTypes.IMAGE}
         >
           {filesByType[FileTypes.IMAGE].map(file => (
-            <FileCard key={file._id} file={file} />
+            <FileCard key={file._id} file={file} canAccess={canAccess} />
           ))}
         </TabPane>
         <TabPane
@@ -111,7 +144,7 @@ export const Files = () => {
           key={FileTypes.PDF}
         >
           {filesByType[FileTypes.PDF].map(file => (
-            <FileCard key={file._id} file={file} />
+            <FileCard key={file._id} file={file} canAccess={canAccess} />
           ))}
         </TabPane>
         <TabPane
@@ -124,7 +157,7 @@ export const Files = () => {
           key={FileTypes.URL}
         >
           {filesByType[FileTypes.URL].map(file => (
-            <FileCard key={file._id} file={file} />
+            <FileCard key={file._id} file={file} canAccess={canAccess} />
           ))}
         </TabPane>
       </Tabs>
